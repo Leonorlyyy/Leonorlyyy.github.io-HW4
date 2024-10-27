@@ -1,0 +1,19 @@
+---
+title: "A website about me"
+output: 
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
+---
+
+## Hi! Welcome to my website!
+
+My name is Leonor Rui. 
+
+I am a MS biostats student at Columbia University Mailman School of Public Health.
+
+This is me:
+
+<img src="images/profile.jpg" style="width:50%">
+
