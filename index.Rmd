@@ -11,7 +11,7 @@ output:
 
 My name is Leonor Rui. 
 
-I am a MS biostats student at Columbia University Mailman School of Public Health.
+I am a MS biostats student at Columbia University Mailman School of Public Health. Particularly passionate about health data management, data structuring, and psychopharmacological statistics.
 
 This is me:
 
