@@ -1,0 +1,88 @@
+---
+title: "Dashboard"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(p8105.datasets)
+library(plotly)
+```
+
+Randomly select 10000 observations from the rest_inspec dataset:
+
+```{r}
+data("rest_inspec")
+
+nyc_rest_df = rest_inspec[sample(nrow(rest_inspec), 10000), ]
+```
+
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r, warning=FALSE}
+nyc_rest_df |>
+  filter(!is.na(score)) |>
+  mutate(cuisine_description = fct_reorder(cuisine_description, score),
+         cuisine_description = recode(cuisine_description, "Bottled beverages, including water, sodas, juices, etc." = "Bottled beverages", "Latin (Cuban, Dominican, Puerto Rican, South & Central American)" = "Latin")) |>
+  plot_ly(
+    x = ~cuisine_description, y = ~score, color = ~cuisine_description,
+    type = "box", colors = "viridis"
+  ) |>
+  layout(
+    title = "Boxplots of Restaurant Scores for Each Restaurant Type",
+    xaxis = list(title = "Restaurant Type"),
+    yaxis = list(title = "Restaurant Score")
+  )
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+nyc_rest_df |>
+  count(boro, grade) |>
+  drop_na() |>
+  mutate(boro = fct_reorder(boro, n)) |>
+  plot_ly(
+    x = ~boro, y = ~n, color = ~grade, 
+    type = ~"bar", colors = "viridis"
+  ) |>
+  layout(
+    title = "Grouped Bar Plot of # of Restaurant by Grade and Boro",
+    xaxis = list(title = "Borough"),
+    yaxis = list(title = "Number of Restaurants")
+  )
+```
+
+### Chart C
+
+```{r}
+nyc_rest_df |>
+  filter(boro != "Missing") |>
+  group_by(boro) |>
+  summarise(mean_score = mean(score, na.rm = TRUE)) |>
+  plot_ly(
+    x = ~boro, y = ~mean_score, 
+    type = 'scatter', mode = 'lines+markers'
+  ) |>
+  layout(
+    title = "Line Plot of Mean Restaurant Scores in Each Borough",
+    xaxis = list(title = "Borough"),
+    yaxis = list(title = "Mean Restaurant Score")
+  )
+```
+
+
+
